@@ -1,0 +1,50 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.welcome-container h1 {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.welcome-container p {
+  font-size: 1.2rem;
+  color: #34495e;
+  margin-bottom: 3rem;
+}
+
+.button-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.hospital-btn, .donor-btn {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hospital-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.donor-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.hospital-btn:hover, .donor-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} 
