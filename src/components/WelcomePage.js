@@ -7,21 +7,27 @@ const WelcomePage = () => {
 
   return (
     <div className="welcome-container">
-      <h1>Welcome to Bloona</h1>
-      <p>Your trusted blood donation platform</p>
-      <div className="button-container">
-        <button 
-          className="hospital-btn"
-          onClick={() => navigate('/hospital')}
-        >
-          Hospital
-        </button>
-        <button 
-          className="donor-btn"
-          onClick={() => navigate('/donor')}
-        >
-          Donor
-        </button>
+      <div className="welcome-content">
+        <h1>Welcome to Bloona</h1>
+        <p>Your trusted platform for blood donation management</p>
+        
+        <div className="user-types">
+          <div className="user-type hospital">
+            <h2>For Hospitals</h2>
+            <div className="button-group">
+              <button onClick={() => navigate('/hospital/signup')}>Sign Up</button>
+              <button onClick={() => navigate('/hospital/login')}>Login</button>
+            </div>
+          </div>
+          
+          <div className="user-type donor">
+            <h2>For Donors</h2>
+            <div className="button-group">
+              <button onClick={() => navigate('/donor/signup')}>Sign Up</button>
+              <button onClick={() => navigate('/donor/login')}>Login</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

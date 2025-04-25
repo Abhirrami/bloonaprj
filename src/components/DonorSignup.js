@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './HospitalSignup.css';
+import './DonorSignup.css';
 
-const HospitalSignup = () => {
+const DonorSignup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    id: '',
+    age: '',
+    donor_id: '',
+    blood_group: '',
     location: '',
     contact: '',
     password: '',
     confirmPassword: ''
   });
+  const [healthReport, setHealthReport] = useState(null);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    setHealthReport(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -28,20 +35,33 @@ const HospitalSignup = () => {
       return;
     }
 
+    if (!healthReport) {
+      setError('Please upload your health report');
+      return;
+    }
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('age', formData.age);
+    data.append('donor_id', formData.donor_id);
+    data.append('blood_group', formData.blood_group);
+    data.append('location', formData.location);
+    data.append('contact', formData.contact);
+    data.append('password', formData.password);
+    data.append('healthReport', healthReport);
+
     try {
-      const response = await axios.post('http://localhost:5000/api/hospital/signup', {
-        name: formData.name,
-        id: formData.id,
-        location: formData.location,
-        contact: formData.contact,
-        password: formData.password
+      const response = await axios.post('http://localhost:5000/api/donor/signup', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userType', 'hospital');
-        localStorage.setItem('hospital', JSON.stringify(response.data.hospital));
-        navigate('/hospital/dashboard');
+        localStorage.setItem('userType', 'donor');
+        localStorage.setItem('donor', JSON.stringify(response.data.donor));
+        navigate('/donor/dashboard');
       }
     } catch (err) {
       if (err.response) {
@@ -60,11 +80,11 @@ const HospitalSignup = () => {
 
   return (
     <div className="signup-container">
-      <h2>Hospital Sign Up</h2>
+      <h2>Donor Sign Up</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Hospital Name</label>
+          <label>Name</label>
           <input
             type="text"
             name="name"
@@ -74,14 +94,43 @@ const HospitalSignup = () => {
           />
         </div>
         <div className="form-group">
-          <label>Hospital ID</label>
+          <label>Age</label>
           <input
-            type="text"
-            name="id"
-            value={formData.id}
+            type="number"
+            name="age"
+            value={formData.age}
             onChange={handleChange}
             required
           />
+        </div>
+        <div className="form-group">
+          <label>Donor ID</label>
+          <input
+            type="text"
+            name="donor_id"
+            value={formData.donor_id}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Blood Group</label>
+          <select
+            name="blood_group"
+            value={formData.blood_group}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
         </div>
         <div className="form-group">
           <label>Location</label>
@@ -100,6 +149,15 @@ const HospitalSignup = () => {
             name="contact"
             value={formData.contact}
             onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Health Report</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={handleFileChange}
             required
           />
         </div>
@@ -126,10 +184,10 @@ const HospitalSignup = () => {
         <button type="submit" className="submit-btn">Sign Up</button>
       </form>
       <p className="login-link">
-        Already have an account? <span onClick={() => navigate('/hospital/login')}>Login</span>
+        Already have an account? <span onClick={() => navigate('/donor/login')}>Login</span>
       </p>
     </div>
   );
 };
 
-export default HospitalSignup; 
+export default DonorSignup; 
